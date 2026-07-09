@@ -365,14 +365,14 @@ export default function Home() {
                   {money(total)}
                 </div>
 
-                {/* NOVO: GRÁFICO VISUAL DE DISTRIBUIÇÃO DA PARCELA */}
+                {/* GRÁFICO VISUAL DE DISTRIBUIÇÃO DA PARCELA - CORRIGIDO */}
                 <div className="mt-6">
                   <p className="text-xs text-slate-400 mb-2 font-semibold tracking-wider uppercase">Payment Breakdown</p>
                   <div className="h-5 w-full rounded-md overflow-hidden flex bg-slate-800">
                     <div style={{ width: `${pctPrincipalInterest}%` }} className="bg-blue-500 h-full transition-all" title="P&I" />
                     <div style={{ width: `${pctTax}%` }} className="bg-amber-500 h-full transition-all" title="Taxes" />
                     <div style={{ width: `${pctInsurance}%` }} className="bg-rose-500 h-full transition-all" title="Insurance" />
-                    {hoa > 0 && <div style={{ width: `${pctInteret: pctHoa}%` }} className="bg-purple-500 h-full transition-all" title="HOA" />}
+                    {hoa > 0 && <div style={{ width: `${pctHoa}%` }} className="bg-purple-500 h-full transition-all" title="HOA" />}
                     {pmi > 0 && <div style={{ width: `${pctPmi}%` }} className="bg-teal-500 h-full transition-all" title="PMI" />}
                   </div>
                 </div>
@@ -459,7 +459,7 @@ export default function Home() {
 
           </div>
 
-          {/* NOVO: COMPONENTE PROFISSIONAL - AMORTIZATION SCHEDULE TABELA */}
+          {/* COMPONENTE PROFISSIONAL - AMORTIZATION SCHEDULE TABELA - TOTALMENTE REVISADO */}
           <section className="mt-16 border-t pt-12">
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
               <div>
@@ -488,7 +488,7 @@ export default function Home() {
                       const totalEscrowYear = (monthlyTax + monthlyInsurance + hoa) * 12 + item.months.reduce((acc, curr) => acc + curr.pmiPaid, 0);
 
                       return (
-                        <useMemo key={`year-${item.year}`}>
+                        <span className="contents" key={`year-group-${item.year}`}>
                           {/* Linha Macro do Ano */}
                           <tr 
                             onClick={() => toggleYear(item.year)}
@@ -512,11 +512,14 @@ export default function Home() {
                               <td className="py-2.5 px-10 text-slate-500">Month {mObj.month}</td>
                               <td className="py-2.5 px-4">{money(mObj.principalPaid)}</td>
                               <td className="py-2.5 px-4">{money(mObj.interestPaid)}</td>
-                              <td className="py-2.5 px-4">{money(monthlyTax + monthlyInsurance + hoa + mObj.pmiPaid)} {mObj.pmiPaid === 0 && pmi > 0 && <span className="text-[10px] text-emerald-600 font-bold ml-1">(PMI Dropped)</span>}</td>
+                              <td className="py-2.5 px-4">
+                                {money(monthlyTax + monthlyInsurance + hoa + mObj.pmiPaid)} 
+                                {mObj.pmiPaid === 0 && pmi > 0 && <span className="text-[10px] text-emerald-600 font-bold ml-1">(PMI Dropped)</span>}
+                              </td>
                               <td className="py-2.5 px-6 text-right font-mono text-slate-700">{money(mObj.remainingBalance)}</td>
                             </tr>
                           ))}
-                        </useMemo>
+                        </span>
                       );
                     })}
                   </tbody>
@@ -577,7 +580,6 @@ export default function Home() {
                 </p>
               </div>
 
-              {/* NOVO: FAQ ESTRUTURAL ADICIONAL EXIGIDA PARA SEU SEO FICAR COMPLETASSO */}
               <div className="border rounded-2xl p-5">
                 <h3 className="font-bold text-lg">
                   When does Private Mortgage Insurance (PMI) automatically cancel?
