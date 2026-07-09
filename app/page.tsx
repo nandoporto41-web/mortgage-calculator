@@ -138,27 +138,28 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-slate-100">
 
-      {/* MELHORIA: METATAG DE VERIFICAÇÃO EXIGIDA PELO ADSENSE */}
-      <head>
-        <meta name="google-adsense-account" content="ca-pub-1156108807705161" />
-      </head>
+      {/* MONETAG 1: Script de Anúncio Formato Vignette convertido de forma segura para Next.js */}
+      <Script id="monetag-vignette" strategy="afterInteractive">
+        {`
+          (function(s){
+            s.dataset.zone='11262714';
+            s.src='https://n6wxm.com/vignette.min.js';
+          })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')));
+        `}
+      </Script>
 
-      {/* SCRIPT OFICIAL DO ADSENSE (ID CORRIGIDO COM BASE NA SUA IMAGEM) */}
+      {/* MONETAG 2: Segunda Zona de Anúncio Ativada */}
       <Script
-        async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1156108807705161"
-        crossOrigin="anonymous"
+        src="https://5gvci.com/act/files/tag.min.js?z=11262716"
         strategy="afterInteractive"
+        data-cfasync="false"
       />
 
+      {/* MONETAG 3: Terceira Zona de Anúncio Ativada */}
       <Script
-        src="https://5gvci.com/act/files/tag.min.js?z=11258998"
+        src="https://5gvci.com/act/files/tag.min.js?z=11262722"
         strategy="afterInteractive"
-      />
-
-      <Script
-        src="https://omg10.com/4/11259367"
-        strategy="lazyOnload"
+        data-cfasync="false"
       />
 
       <section className="bg-gradient-to-r from-blue-700 to-indigo-700 text-white">
@@ -537,232 +538,15 @@ export default function Home() {
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
                 <h3 className="font-bold text-lg text-blue-700 mb-2">Principal & Interest (P&I)</h3>
-                <p className="text-sm text-slate-600 leading-6">
-                  The primary core of your debt. The principal directly reduces your outstanding balance, while interest represents the bank fee for borrowing money. At the beginning of the amortization cycle, interest forms the largest part of your monthly bill.
-                </p>
-              </div>
-              <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-                <h3 className="font-bold text-lg text-amber-700 mb-2">Property Taxes (T)</h3>
-                <p className="text-sm text-slate-600 leading-6">
-                  Assessed annually by local municipal governments or counties to fund regional public infrastructure, schools, and roads. Usually distributed evenly into 12 distinct escrow installments throughout the fiscal year.
-                </p>
-              </div>
-              <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-                <h3 className="font-bold text-lg text-rose-700 mb-2">Homeowners Insurance (I)</h3>
-                <p className="text-sm text-slate-600 leading-6">
-                  A mandatory private coverage policy required by institutional underwriters to fully safeguard the architectural structure from environmental disasters, accidental fires, hazards, or structural damage.
-                </p>
-              </div>
-              <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-                <h3 className="font-bold text-lg text-teal-700 mb-2">Private Mortgage Insurance (PMI)</h3>
-                <p className="text-sm text-slate-600 leading-6">
-                  An insurance policy that protects the lender if you default on your loan. It is typically required if your down payment is less than 20% of the home purchase price. It can be cancelled once you reach 22% equity.
+                <p className="text-sm text-slate-600">
+                  This forms the core foundation of your financing commitment. The principal directly pays down your net loan balance, while the interest covers the lending institution's premium service fees.
                 </p>
               </div>
             </div>
           </section>
-
-          {/* NOVO CONTEÚDO EXTRA DE SEO 2: DICAS INTERATIVAS PARA REDUZIR A PARCELA */}
-          <section className="mt-16 bg-gradient-to-br from-slate-900 to-blue-950 text-white p-8 rounded-3xl shadow-lg">
-            <h2 className="text-2xl font-bold mb-4 text-emerald-400">Pro Strategies to Lower Your Monthly Payments</h2>
-            <p className="text-sm text-slate-300 mb-6 leading-6">
-              If your current calculation results look slightly higher than your optimal household cash flow budget, consider applying these adjustments within the mortgage metrics above:
-            </p>
-            <ul className="space-y-4 text-sm">
-              <li className="flex items-start gap-3">
-                <span className="text-emerald-400 font-bold text-lg">✓</span>
-                <div>
-                  <strong>Increase Your Down Payment to 20%:</strong> This completely removes the mandatory monthly <strong>PMI fee</strong> from your amortization timeline, saving you thousands of dollars over the lifetime of the loan.
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-emerald-400 font-bold text-lg">✓</span>
-                <div>
-                  <strong>Boost Your Credit Score:</strong> Institutional banks assign premium interest rates to borrowers with excellent credit ratings. Dropping your rate by even 0.5% drastically reduces long-term debt.
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-emerald-400 font-bold text-lg">✓</span>
-                <div>
-                  <strong>Shop Around for Insurance:</strong> You are not locked into the default insurance estimates. Get custom quotes from competing home insurance companies to find a lower annual premium.
-                </div>
-              </li>
-            </ul>
-          </section>
-
-          {/* NOVO CONTEÚDO EXTRA DE SEO 3: GLOSSÁRIO DE TERMOS AMERICANOS */}
-          <section className="mt-16 border-t pt-12">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Real Estate Terms Glossary</h2>
-            <div className="overflow-x-auto border border-slate-200 rounded-xl">
-              <table className="w-full text-left border-collapse text-sm">
-                <thead>
-                  <tr className="bg-slate-50 border-b border-slate-200 text-slate-700 font-bold">
-                    <th className="p-4 w-1/4">Term</th>
-                    <th className="p-4">Official Financial Definition</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 text-slate-600">
-                  <tr>
-                    <td className="p-4 font-semibold text-slate-900">Amortization</td>
-                    <td className="p-4">The structural method of paying off a home loan balance using regular monthly payments over a set timeline, where portions shift gradually from interest toward principal.</td>
-                  </tr>
-                  <tr>
-                    <td className="p-4 font-semibold text-slate-900">HOA Fees</td>
-                    <td className="p-4">Homeowners Association assessments charged monthly by specific suburban neighborhoods or condo complexes to manage local landscape, building maintenance, and community amenities.</td>
-                  </tr>
-                  <tr>
-                    <td className="p-4 font-semibold text-slate-900">Down Payment</td>
-                    <td className="p-4">The initial upfront cash payment made at closing towards the total cost of a property purchase, expressed as a percent of the primary value.</td>
-                  </tr>
-                  <tr>
-                    <td className="p-4 font-semibold text-slate-900">Loan Term</td>
-                    <td className="p-4">The contracted timeframe allocated to fully repay the borrowed funds. Standard intervals in the US financing market are fixed 15-year or 30-year structures.</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          {/* Ad Space */}
-          <div className="my-10 rounded-2xl border-2 border-dashed border-slate-300 p-8 text-center bg-slate-50">
-            <p className="text-slate-500 font-semibold">
-              Advertisement
-            </p>
-            <div id="ad-container-2" className="mt-4 min-h-[120px]" />
-          </div>
-
-          {/* FAQ */}
-          <section className="mt-12">
-
-            <h2 className="text-3xl font-bold mb-8">
-              Frequently Asked Questions
-            </h2>
-
-            <div className="space-y-6">
-
-              <div className="border rounded-2xl p-5">
-                <h3 className="font-bold text-lg">
-                  How is my mortgage payment calculated?
-                </h3>
-                <p className="text-slate-600 mt-2 leading-7">
-                  We use the standard mortgage amortization formula used
-                  by banks across the United States.
-                </p>
-              </div>
-
-              <div className="border rounded-2xl p-5">
-                <h3 className="font-bold text-lg">
-                  Does this include taxes?
-                </h3>
-                <p className="text-slate-600 mt-2 leading-7">
-                  Yes. Property taxes, insurance, HOA fees and PMI are included in the estimated monthly payment breakdown visualization.
-                </p>
-              </div>
-
-              <div className="border rounded-2xl p-5">
-                <h3 className="font-bold text-lg">
-                  Is this calculator accurate?
-                </h3>
-                <p className="text-slate-600 mt-2 leading-7">
-                  Results are estimates based on your inputs and the standard mortgage formula. Your specific commercial underwriter or bank lender may provide slightly different final numbers based on credit status.
-                </p>
-              </div>
-
-              <div className="border rounded-2xl p-5">
-                <h3 className="font-bold text-lg">
-                  When does Private Mortgage Insurance (PMI) automatically cancel?
-                </h3>
-                <p className="text-slate-600 mt-2 leading-7">
-                  In the United States, under the Homeowners Protection Act, lenders must automatically terminate conventional PMI when your principal loan balance reaches 78% of the original purchase price of your home, provided you are current on payments. Our advanced breakdown matrix adjusts this value automatically.
-                </p>
-              </div>
-
-            </div>
-
-          </section>
-
-          {/* Call to Action CTA Block */}
-          <section className="mt-16 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-3xl p-10 text-center shadow-md">
-            <h2 className="text-3xl font-black mb-2">Ready to Buy Your Dream Home?</h2>
-            <p className="text-blue-100 max-w-xl mx-auto mb-6 text-sm">
-              Estimate your monthly payment instantly and plan your long-term personal household finances with confidence.
-            </p>
-            <button 
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="bg-white text-blue-700 px-8 py-3.5 rounded-xl font-bold hover:bg-blue-50 transition"
-            >
-              Calculate Again
-            </button>
-          </section>
-
-          {/* Institutional Footer Layout */}
-          <footer className="mt-16 pt-8 border-t text-center text-xs text-slate-400">
-            <p>© 2026 US Mortgage Calculator</p>
-            <p className="mt-1 text-slate-400">Built for home buyers across the United States.</p>
-            <div className="mt-4 flex justify-center gap-4 text-blue-500 font-semibold">
-              <button onClick={() => setShowAbout(true)} className="hover:underline">About Us</button>
-              <span>|</span>
-              <button onClick={() => setShowPrivacy(true)} className="hover:underline">Privacy Policy</button>
-            </div>
-          </footer>
 
         </div>
-
       </main>
-
-      {/* ABOUT US MODAL COMPONENT */}
-      {showAbout && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 relative max-h-[85vh] overflow-y-auto shadow-2xl">
-            <h2 className="text-2xl font-bold mb-4">About Us</h2>
-            <p className="text-sm text-slate-600 leading-6 mb-4">
-              Welcome to <strong>US Mortgage Calculator</strong>. We provide premium, high-fidelity real estate calculation engines engineered to support homebuyers across the United States.
-            </p>
-            <p className="text-sm text-slate-600 leading-6 mb-4">
-              Our open-source calculations give users access to payment amortization metrics, automatic PMI cancellation data, escrow projections, and comprehensive tax tracking tools without requiring registration.
-            </p>
-            <button 
-              onClick={() => setShowAbout(false)}
-              className="w-full mt-4 bg-slate-900 text-white font-bold py-3 rounded-xl hover:bg-slate-800 transition"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* PRIVACY POLICY MODAL COMPONENT */}
-      {showPrivacy && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 relative max-h-[85vh] overflow-y-auto shadow-2xl">
-            <h2 className="text-2xl font-bold mb-4">Privacy Policy</h2>
-            <p className="text-xs text-slate-400 mb-4">Effective Date: July 2026</p>
-            <div className="space-y-4 text-xs text-slate-600 leading-5">
-              <p>
-                At <strong>US Mortgage Calculator</strong>, accessible via our Vercel web domain, the privacy of our visitors is an absolute priority. This document outlines the distinct types of information collected and how we utilize it.
-              </p>
-              <h3 className="font-bold text-sm text-slate-900 mt-2">Log Files & Cookies</h3>
-              <p>
-                We follow standard analytical procedures using system log files. These logs map internal IP addresses, internet service providers (ISPs), browser categories, entrance/exit timestamps, and click counts. This data is entirely anonymous and never paired with identifiable personnel records.
-              </p>
-              <h3 className="font-bold text-sm text-slate-900 mt-2">Google AdSense Third-Party Advertising</h3>
-              <p>
-                Google, as a third-party marketplace vendor, implements tracking cookies to serve tailored promotions across our pages based on prior web activity. Users can opt-out of DART cookies by visiting the official Google Ad Network Privacy guidelines.
-              </p>
-              <p>
-                Our server platforms do not possess authority or configure administrative access over tracking cookies utilized by these independent third-party marketing services.
-              </p>
-            </div>
-            <button 
-              onClick={() => setShowPrivacy(false)}
-              className="w-full mt-6 bg-slate-900 text-white font-bold py-3 rounded-xl hover:bg-slate-800 transition"
-            >
-              Understand & Accept
-            </button>
-          </div>
-        </div>
-      )}
-
     </div>
   );
 }
