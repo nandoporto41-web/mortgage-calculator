@@ -1,38 +1,32 @@
+// PARTE 1/3
+
 "use client";
 
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Script from "next/script";
 
-function formatCurrency(value: number) {
-  // Tratamento de segurança caso o valor final não seja um número válido
-  const safeValue = isNaN(value) || !isFinite(value) ? 0 : value;
-  return new Intl.NumberFormat("en-US", {
+const money = (v: number) =>
+  new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    maximumFractionDigits: 2,
-  }).format(safeValue);
-}
+    maximumFractionDigits: 0,
+  }).format(v);
 
-function calculateMortgage(
-  loanAmount: number,
-  annualRate: number,
+function mortgage(
+  principal: number,
+  rate: number,
   years: number
 ) {
-  // Evita quebra caso anos ou taxa sejam apagados ou fiquem zerados
-  const safeYears = years || 30;
-  const monthlyRate = (annualRate || 0) / 100 / 12;
-  const payments = safeYears * 12;
+  const r = rate / 100 / 12;
+  const n = years * 12;
 
-  if (monthlyRate === 0) {
-    return loanAmount / payments;
-  }
+  if (r === 0) return principal / n;
 
-  const payment = 
-    (loanAmount *
-      (monthlyRate * Math.pow(1 + monthlyRate, payments))) /
-    (Math.pow(1 + monthlyRate, payments) - 1);
-
-  return isNaN(payment) || !isFinite(payment) ? 0 : payment;
+  return (
+    principal *
+    ((r * Math.pow(1 + r, n)) /
+      (Math.pow(1 + r, n) - 1))
+  );
 }
 
 export default function Home() {
@@ -40,31 +34,40 @@ export default function Home() {
   const [downPayment, setDownPayment] = useState(80000);
   const [interestRate, setInterestRate] = useState(6.5);
   const [loanYears, setLoanYears] = useState(30);
-
-  const [propertyTax, setPropertyTax] = useState(4800);
-  const [insurance, setInsurance] = useState(1800);
+  const [propertyTax, setPropertyTax] = useState(4200);
+  const [insurance, setInsurance] = useState(1500);
   const [hoa, setHoa] = useState(0);
   const [pmi, setPmi] = useState(120);
 
-  const loanAmount = Math.max(homePrice - downPayment, 0);
+  const loanAmount = Math.max(
+    homePrice - downPayment,
+    0
+  );
 
-  const principalInterest = useMemo(() => {
-    return calculateMortgage(
-      loanAmount,
-      interestRate,
-      loanYears
-    );
-  }, [loanAmount, interestRate, loanYears]);
+  const principalInterest = useMemo(
+    () =>
+      mortgage(
+        loanAmount,
+        interestRate,
+        loanYears
+      ),
+    [loanAmount, interestRate, loanYears]
+  );
 
-  const monthlyTax = (propertyTax || 0) / 12;
-  const monthlyInsurance = (insurance || 0) / 12;
+  const monthlyTax = propertyTax / 12;
+  const monthlyInsurance = insurance / 12;
 
-  const totalMonthly =
+  const total =
     principalInterest +
     monthlyTax +
     monthlyInsurance +
-    (hoa || 0) +
-    (pmi || 0);
+    hoa +
+    pmi;
+
+  const downPercent = Math.min(
+    (downPayment / homePrice) * 100,
+    100
+  );
 
   return (
     <div className="min-h-screen bg-slate-100">
@@ -74,92 +77,148 @@ export default function Home() {
         strategy="afterInteractive"
       />
 
-      <div className="max-w-4xl mx-auto p-6">
+      <Script
+        src="https://omg10.com/4/11259367"
+        strategy="lazyOnload"
+      />
 
-        <div className="bg-white rounded-3xl shadow-lg p-8">
+      <section className="bg-gradient-to-r from-blue-700 to-indigo-700 text-white">
 
-          <h1 className="text-4xl font-bold text-center">
+        <div className="max-w-6xl mx-auto px-6 py-14">
+
+          <h1 className="text-5xl font-black">
             US Mortgage Calculator
           </h1>
 
-          <p className="text-center text-slate-500 mt-2">
-            Calculate your estimated monthly mortgage payment.
+          <p className="mt-4 text-lg text-blue-100 max-w-2xl">
+            Calculate your monthly mortgage payment,
+            taxes, insurance, HOA and PMI in seconds.
           </p>
 
-          <div className="grid md:grid-cols-2 gap-6 mt-8">
+          <button
+            className="mt-8 bg-white text-blue-700 px-8 py-4 rounded-xl font-bold hover:scale-105 transition"
+            onClick={() =>
+              window.scrollTo({
+                top: 450,
+                behavior: "smooth",
+              })
+            }
+          >
+            Calculate Now
+          </button>
+
+        </div>
+
+      </section>
+
+      <main className="max-w-6xl mx-auto p-6 -mt-10">
+
+        <div className="bg-white rounded-3xl shadow-xl p-8">
+
+          <div className="grid lg:grid-cols-2 gap-8">
 
             <div>
+
+              <h2 className="text-2xl font-bold mb-6">
+                Loan Information
+              </h2>
 
               <label className="font-semibold">
                 Home Price
               </label>
 
               <input
-                type="number"
-                className="w-full border rounded-xl p-3 mt-2"
+                type="range"
+                min={50000}
+                max={2000000}
+                step={5000}
                 value={homePrice}
                 onChange={(e) =>
                   setHomePrice(Number(e.target.value))
                 }
+                className="w-full mt-2"
               />
 
-            </div>
-
-            <div>
-
+              <input
+                type="number"
+                value={homePrice}
+                onChange={(e)=>
+                  setHomePrice(Number(e.target.value))
+                }
+                className="w-full border rounded-xl p-3 mt-2 mb-6"
+              />
               <label className="font-semibold">
                 Down Payment
               </label>
 
               <input
-                type="number"
-                className="w-full border rounded-xl p-3 mt-2"
+                type="range"
+                min={0}
+                max={homePrice}
+                step={1000}
                 value={downPayment}
                 onChange={(e) =>
                   setDownPayment(Number(e.target.value))
                 }
+                className="w-full mt-2"
               />
 
-            </div>
+              <input
+                type="number"
+                value={downPayment}
+                onChange={(e) =>
+                  setDownPayment(
+                    Math.min(Number(e.target.value), homePrice)
+                  )
+                }
+                className="w-full border rounded-xl p-3 mt-2 mb-6"
+              />
 
-            <div>
+              <div className="mb-6">
+
+                <div className="flex justify-between text-sm mb-2">
+                  <span>Down Payment</span>
+                  <span>{downPercent.toFixed(1)}%</span>
+                </div>
+
+                <div className="h-3 bg-slate-200 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-emerald-500"
+                    style={{ width: `${downPercent}%` }}
+                  />
+                </div>
+
+              </div>
 
               <label className="font-semibold">
-                Interest Rate %
+                Interest Rate (%)
               </label>
 
               <input
                 type="number"
                 step="0.01"
-                className="w-full border rounded-xl p-3 mt-2"
                 value={interestRate}
                 onChange={(e) =>
                   setInterestRate(Number(e.target.value))
                 }
+                className="w-full border rounded-xl p-3 mt-2 mb-6"
               />
-
-            </div>
-
-            <div>
 
               <label className="font-semibold">
                 Loan Term
               </label>
 
               <select
-                className="w-full border rounded-xl p-3 mt-2"
                 value={loanYears}
                 onChange={(e) =>
                   setLoanYears(Number(e.target.value))
                 }
+                className="w-full border rounded-xl p-3 mt-2 mb-6"
               >
                 <option value={15}>15 Years</option>
                 <option value={20}>20 Years</option>
                 <option value={30}>30 Years</option>
               </select>
-
-            </div>
-            <div>
 
               <label className="font-semibold">
                 Property Tax (Yearly)
@@ -167,16 +226,12 @@ export default function Home() {
 
               <input
                 type="number"
-                className="w-full border rounded-xl p-3 mt-2"
                 value={propertyTax}
                 onChange={(e) =>
                   setPropertyTax(Number(e.target.value))
                 }
+                className="w-full border rounded-xl p-3 mt-2 mb-6"
               />
-
-            </div>
-
-            <div>
 
               <label className="font-semibold">
                 Home Insurance (Yearly)
@@ -184,16 +239,12 @@ export default function Home() {
 
               <input
                 type="number"
-                className="w-full border rounded-xl p-3 mt-2"
                 value={insurance}
                 onChange={(e) =>
                   setInsurance(Number(e.target.value))
                 }
+                className="w-full border rounded-xl p-3 mt-2 mb-6"
               />
-
-            </div>
-
-            <div>
 
               <label className="font-semibold">
                 HOA (Monthly)
@@ -201,16 +252,12 @@ export default function Home() {
 
               <input
                 type="number"
-                className="w-full border rounded-xl p-3 mt-2"
                 value={hoa}
                 onChange={(e) =>
                   setHoa(Number(e.target.value))
                 }
+                className="w-full border rounded-xl p-3 mt-2 mb-6"
               />
-
-            </div>
-
-            <div>
 
               <label className="font-semibold">
                 PMI (Monthly)
@@ -218,137 +265,193 @@ export default function Home() {
 
               <input
                 type="number"
-                className="w-full border rounded-xl p-3 mt-2"
                 value={pmi}
                 onChange={(e) =>
                   setPmi(Number(e.target.value))
                 }
+                className="w-full border rounded-xl p-3 mt-2"
               />
 
             </div>
 
-          </div>
+            <div>
 
-          <div className="mt-10 grid md:grid-cols-2 gap-6">
+              <div className="bg-slate-900 rounded-3xl p-8 text-white">
 
-            <div className="bg-slate-900 text-white rounded-2xl p-6">
+                <h2 className="text-2xl font-bold mb-6">
+                  Monthly Payment
+                </h2>
 
-              <h2 className="text-lg font-bold mb-6">
-                Monthly Payment Breakdown
-              </h2>
+                <div className="text-5xl font-black text-emerald-400">
+                  {money(total)}
+                </div>
 
-              <div className="flex justify-between py-2 border-b border-slate-700">
-                <span>Loan Amount</span>
-                <strong>{formatCurrency(loanAmount)}</strong>
+                <div className="mt-8 space-y-4">
+
+                  <div className="flex justify-between">
+                    <span>Loan Amount</span>
+                    <strong>{money(loanAmount)}</strong>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span>Principal & Interest</span>
+                    <strong>{money(principalInterest)}</strong>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span>Property Tax</span>
+                    <strong>{money(monthlyTax)}</strong>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span>Insurance</span>
+                    <strong>{money(monthlyInsurance)}</strong>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span>HOA</span>
+                    <strong>{money(hoa)}</strong>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span>PMI</span>
+                    <strong>{money(pmi)}</strong>
+                  </div>
+
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 mt-8">
+
+                  <button
+                    className="bg-blue-600 hover:bg-blue-700 rounded-xl py-3 font-bold"
+                  >
+                    Calculate
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setHomePrice(400000);
+                      setDownPayment(80000);
+                      setInterestRate(6.5);
+                      setLoanYears(30);
+                      setPropertyTax(4200);
+                      setInsurance(1500);
+                      setHoa(0);
+                      setPmi(120);
+                    }}
+                    className="bg-slate-700 hover:bg-slate-600 rounded-xl py-3 font-bold"
+                  >
+                    Reset
+                  </button>
+
+                </div>
+
               </div>
-
-              <div className="flex justify-between py-2 border-b border-slate-700">
-                <span>Principal & Interest</span>
-                <strong>{formatCurrency(principalInterest)}</strong>
-              </div>
-
-              <div className="flex justify-between py-2 border-b border-slate-700">
-                <span>Property Tax</span>
-                <strong>{formatCurrency(monthlyTax)}</strong>
-              </div>
-
-              <div className="flex justify-between py-2 border-b border-slate-700">
-                <span>Insurance</span>
-                <strong>{formatCurrency(monthlyInsurance)}</strong>
-              </div>
-
-              <div className="flex justify-between py-2 border-b border-slate-700">
-                <span>HOA</span>
-                <strong>{formatCurrency(hoa)}</strong>
-              </div>
-
-              <div className="flex justify-between py-2">
-                <span>PMI</span>
-                <strong>{formatCurrency(pmi)}</strong>
-              </div>
-
-            </div>
-
-            <div className="bg-emerald-600 rounded-2xl text-white flex flex-col justify-center items-center p-8">
-
-              <p className="uppercase tracking-widest text-sm opacity-80">
-                Estimated Monthly Payment
-              </p>
-
-              <h2 className="text-5xl font-extrabold mt-4">
-                {formatCurrency(totalMonthly)}
-              </h2>
-
-              <p className="mt-4 text-center opacity-90">
-                Includes principal, interest, taxes, insurance,
-                HOA and PMI.
-              </p>
-
-            </div>
-
-          </div>
-          <div className="mt-10 grid md:grid-cols-4 gap-4">
-
-            <div className="bg-white border rounded-2xl p-5 text-center shadow-sm">
-              <p className="text-slate-500 text-sm">Home Price</p>
-              <h3 className="text-xl font-bold mt-2">
-                {formatCurrency(homePrice)}
-              </h3>
-            </div>
-
-            <div className="bg-white border rounded-2xl p-5 text-center shadow-sm">
-              <p className="text-slate-500 text-sm">Down Payment</p>
-              <h3 className="text-xl font-bold mt-2">
-                {formatCurrency(downPayment)}
-              </h3>
-            </div>
-
-            <div className="bg-white border rounded-2xl p-5 text-center shadow-sm">
-              <p className="text-slate-500 text-sm">Interest Rate</p>
-              <h3 className="text-xl font-bold mt-2">
-                {(interestRate || 0).toFixed(2)}%
-              </h3>
-            </div>
-
-            <div className="bg-white border rounded-2xl p-5 text-center shadow-sm">
-              <p className="text-slate-500 text-sm">Loan Term</p>
-              <h3 className="text-xl font-bold mt-2">
-                {loanYears} Years
-              </h3>
             </div>
 
           </div>
 
-          <div className="mt-12 border-t pt-8">
+          {/* Ad Space */}
+          <div className="my-10 rounded-2xl border-2 border-dashed border-slate-300 p-8 text-center bg-slate-50">
+            <p className="text-slate-500 font-semibold">
+              Advertisement
+            </p>
+            <div id="ad-container" className="mt-4 min-h-[120px]" />
+          </div>
 
-            <h2 className="text-2xl font-bold mb-4">
-              About this Mortgage Calculator
+          {/* FAQ */}
+
+          <section className="mt-12">
+
+            <h2 className="text-3xl font-bold mb-8">
+              Frequently Asked Questions
             </h2>
 
-            <p className="text-slate-600 leading-7">
-              This mortgage calculator estimates your monthly home loan payment
-              using the standard amortization formula. It includes principal,
-              interest, property taxes, homeowners insurance, HOA fees and PMI,
-              helping you better understand the true monthly cost of buying a
-              home in the United States.
+            <div className="space-y-6">
+
+              <div className="border rounded-2xl p-5">
+                <h3 className="font-bold text-lg">
+                  How is my mortgage payment calculated?
+                </h3>
+
+                <p className="text-slate-600 mt-2 leading-7">
+                  We use the standard mortgage amortization formula used
+                  by banks across the United States.
+                </p>
+              </div>
+
+              <div className="border rounded-2xl p-5">
+                <h3 className="font-bold text-lg">
+                  Does this include taxes?
+                </h3>
+
+                <p className="text-slate-600 mt-2 leading-7">
+                  Yes. Property taxes, insurance, HOA fees and PMI are
+                  included in the estimated monthly payment.
+                </p>
+              </div>
+
+              <div className="border rounded-2xl p-5">
+                <h3 className="font-bold text-lg">
+                  Is this calculator accurate?
+                </h3>
+
+                <p className="text-slate-600 mt-2 leading-7">
+                  Results are estimates based on your inputs and the
+                  standard mortgage formula. Your lender may provide
+                  slightly different numbers.
+                </p>
+              </div>
+
+            </div>
+
+          </section>
+
+          {/* Bottom CTA */}
+
+          <section className="mt-14 rounded-3xl bg-gradient-to-r from-blue-700 to-indigo-700 text-white p-10 text-center">
+
+            <h2 className="text-3xl font-black">
+              Ready to Buy Your Dream Home?
+            </h2>
+
+            <p className="mt-4 text-blue-100 max-w-2xl mx-auto">
+              Estimate your monthly payment instantly and plan your
+              finances with confidence.
             </p>
 
-            <p className="text-slate-600 leading-7 mt-4">
-              Results are estimates only and should not replace quotes provided
-              by lenders. Actual payments may vary based on your loan program,
-              credit score, taxes and insurance premiums.
+            <button
+              onClick={() =>
+                window.scrollTo({
+                  top: 0,
+                  behavior: "smooth",
+                })
+              }
+              className="mt-8 bg-white text-blue-700 px-8 py-4 rounded-xl font-bold hover:scale-105 transition"
+            >
+              Calculate Again
+            </button>
+
+          </section>
+
+          <footer className="mt-14 border-t pt-8 text-center">
+
+            <p className="text-slate-500">
+              © {new Date().getFullYear()} US Mortgage Calculator
             </p>
 
-          </div>
+            <p className="text-slate-400 text-sm mt-2">
+              Built for home buyers across the United States.
+            </p>
 
-          <footer className="mt-12 text-center text-slate-500 text-sm">
-            © {new Date().getFullYear()} US Mortgage Calculator
           </footer>
 
         </div>
 
-      </div>
+      </main>
 
     </div>
+
   );
+
 }
