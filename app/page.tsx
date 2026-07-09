@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from 'react';
+import Script from 'next/script'; // Importando direto aqui
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('mortgage');
@@ -11,6 +12,13 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 p-4">
+      {/* Forçando a tag da Monetag direto na página */}
+      <Script 
+        src="https://5gvci.com/act/files/tag.min.js?z=11258998"
+        strategy="afterInteractive"
+        id="monetag-direct-inject"
+      />
+
       <div className="max-w-xl mx-auto bg-white rounded-2xl p-6 shadow-sm border border-slate-200 mt-10">
         <h1 className="text-xl font-bold text-center text-slate-900 mb-6">US MortgageSuite</h1>
         
