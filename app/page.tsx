@@ -37,6 +37,9 @@ export default function Home() {
   const [hoa, setHoa] = useState(0);
   const [pmi, setPmi] = useState(120);
 
+  // Estado para controlar os anos expandidos na tabela de amortização
+  const [expandedYears, setExpandedYears] = useState<Record<number, boolean>>({});
+
   // Estados para controlar a abertura dos modais institucionais
   const [showAbout, setShowAbout] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
@@ -70,6 +73,67 @@ export default function Home() {
     (downPayment / homePrice) * 100,
     100
   );
+
+  // Geração da Tabela de Amortização Detalhada
+  const amortizationSchedule = useMemo(() => {
+    let balance = loanAmount;
+    const r = interestRate / 100 / 12;
+    const totalMonths = loanYears * 12;
+    const schedule = [];
+
+    let totalInterestYear = 0;
+    let totalPrincipalYear = 0;
+    let monthsArray = [];
+
+    for (let m = 1; m <= totalMonths; m++) {
+      const interestM = balance * r;
+      const principalM = Math.max(principalInterest - interestM, 0);
+      
+      // Regra americana: PMI se cancela quando o saldo cai abaixo de 78% do preço de compra original
+      const currentPmi = balance > homePrice * 0.78 ? pmi : 0;
+      const totalM = principalInterest + monthlyTax + monthlyInsurance + hoa + currentPmi;
+      
+      balance = Math.max(balance - principalM, 0);
+
+      totalInterestYear += interestM;
+      totalPrincipalYear += principalM;
+
+      monthsArray.push({
+        month: m,
+        principalPaid: principalM,
+        interestPaid: interestM,
+        pmiPaid: currentPmi,
+        totalPayment: totalM,
+        remainingBalance: balance,
+      });
+
+      if (m % 12 === 0 || m === totalMonths) {
+        const yearNumber = Math.ceil(m / 12);
+        schedule.push({
+          year: yearNumber,
+          interestPaid: totalInterestYear,
+          principalPaid: totalPrincipalYear,
+          remainingBalance: balance,
+          months: monthsArray,
+        });
+        totalInterestYear = 0;
+        totalPrincipalYear = 0;
+        monthsArray = [];
+      }
+    }
+    return schedule;
+  }, [loanAmount, interestRate, loanYears, principalInterest, homePrice, pmi, monthlyTax, monthlyInsurance, hoa]);
+
+  const toggleYear = (year: number) => {
+    setExpandedYears((prev) => ({ ...prev, [year]: !prev[year] }));
+  };
+
+  // Cálculo de Porcentagens para o Gráfico de Barras Empilhadas
+  const pctPrincipalInterest = (principalInterest / total) * 100;
+  const pctTax = (monthlyTax / total) * 100;
+  const pctInsurance = (monthlyInsurance / total) * 100;
+  const pctHoa = (hoa / total) * 100;
+  const pctPmi = (pmi / total) * 100;
 
   return (
     <div className="min-h-screen bg-slate-100">
@@ -291,7 +355,7 @@ export default function Home() {
 
             <div>
 
-              <div className="bg-slate-900 rounded-3xl p-8 text-white">
+              <div className="bg-slate-900 rounded-3xl p-8 text-white sticky top-6">
 
                 <h2 className="text-2xl font-bold mb-6">
                   Monthly Payment
@@ -301,36 +365,65 @@ export default function Home() {
                   {money(total)}
                 </div>
 
-                <div className="mt-8 space-y-4">
-
-                  <div className="flex justify-between">
-                    <span>Loan Amount</span>
-                    <strong>{money(loanAmount)}</strong>
+                {/* NOVO: GRÁFICO VISUAL DE DISTRIBUIÇÃO DA PARCELA */}
+                <div className="mt-6">
+                  <p className="text-xs text-slate-400 mb-2 font-semibold tracking-wider uppercase">Payment Breakdown</p>
+                  <div className="h-5 w-full rounded-md overflow-hidden flex bg-slate-800">
+                    <div style={{ width: `${pctPrincipalInterest}%` }} className="bg-blue-500 h-full transition-all" title="P&I" />
+                    <div style={{ width: `${pctTax}%` }} className="bg-amber-500 h-full transition-all" title="Taxes" />
+                    <div style={{ width: `${pctInsurance}%` }} className="bg-rose-500 h-full transition-all" title="Insurance" />
+                    {hoa > 0 && <div style={{ width: `${pctInteret: pctHoa}%` }} className="bg-purple-500 h-full transition-all" title="HOA" />}
+                    {pmi > 0 && <div style={{ width: `${pctPmi}%` }} className="bg-teal-500 h-full transition-all" title="PMI" />}
                   </div>
+                </div>
 
-                  <div className="flex justify-between">
-                    <span>Principal & Interest</span>
+                <div className="mt-6 space-y-4">
+
+                  <div className="flex justify-between items-center text-sm">
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 bg-blue-500 rounded-sm inline-block" />
+                      <span>Principal & Interest</span>
+                    </div>
                     <strong>{money(principalInterest)}</strong>
                   </div>
 
-                  <div className="flex justify-between">
-                    <span>Property Tax</span>
+                  <div className="flex justify-between items-center text-sm">
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 bg-amber-500 rounded-sm inline-block" />
+                      <span>Property Tax</span>
+                    </div>
                     <strong>{money(monthlyTax)}</strong>
                   </div>
 
-                  <div className="flex justify-between">
-                    <span>Insurance</span>
+                  <div className="flex justify-between items-center text-sm">
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 bg-rose-500 rounded-sm inline-block" />
+                      <span>Insurance</span>
+                    </div>
                     <strong>{money(monthlyInsurance)}</strong>
                   </div>
 
-                  <div className="flex justify-between">
-                    <span>HOA</span>
+                  <div className="flex justify-between items-center text-sm">
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 bg-purple-500 rounded-sm inline-block" />
+                      <span>HOA Fees</span>
+                    </div>
                     <strong>{money(hoa)}</strong>
                   </div>
 
-                  <div className="flex justify-between">
-                    <span>PMI</span>
+                  <div className="flex justify-between items-center text-sm">
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 bg-teal-500 rounded-sm inline-block" />
+                      <span>PMI</span>
+                    </div>
                     <strong>{money(pmi)}</strong>
+                  </div>
+
+                  <hr className="border-slate-800 my-2" />
+
+                  <div className="flex justify-between text-slate-400 text-xs">
+                    <span>Total Loan Amount</span>
+                    <span>{money(loanAmount)}</span>
                   </div>
 
                 </div>
@@ -338,7 +431,7 @@ export default function Home() {
                 <div className="grid grid-cols-2 gap-3 mt-8">
 
                   <button
-                    className="bg-blue-600 hover:bg-blue-700 rounded-xl py-3 font-bold"
+                    className="bg-blue-600 hover:bg-blue-700 rounded-xl py-3 font-bold transition"
                   >
                     Calculate
                   </button>
@@ -354,7 +447,7 @@ export default function Home() {
                       setHoa(0);
                       setPmi(120);
                     }}
-                    className="bg-slate-700 hover:bg-slate-600 rounded-xl py-3 font-bold"
+                    className="bg-slate-700 hover:bg-slate-600 rounded-xl py-3 font-bold transition"
                   >
                     Reset
                   </button>
@@ -365,6 +458,72 @@ export default function Home() {
             </div>
 
           </div>
+
+          {/* NOVO: COMPONENTE PROFISSIONAL - AMORTIZATION SCHEDULE TABELA */}
+          <section className="mt-16 border-t pt-12">
+            <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+              <div>
+                <h2 className="text-3xl font-bold text-slate-900">Amortization Schedule</h2>
+                <p className="text-slate-500 text-sm mt-1">
+                  See how your principal balance decreases over the lifetime of your loan. Click a year to view monthly data breakdown.
+                </p>
+              </div>
+            </div>
+
+            <div className="overflow-hidden border border-slate-200 rounded-2xl bg-white shadow-sm">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-slate-50 text-slate-700 text-xs font-bold uppercase tracking-wider border-b border-slate-200">
+                      <th className="py-4 px-6">Year / Month</th>
+                      <th className="py-4 px-4">Principal Paid</th>
+                      <th className="py-4 px-4">Interest Paid</th>
+                      <th className="py-4 px-4">Total Tax/Ins/HOA/PMI</th>
+                      <th className="py-4 px-6 text-right">Remaining Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 text-sm text-slate-600">
+                    {amortizationSchedule.map((item) => {
+                      const isExpanded = !!expandedYears[item.year];
+                      const totalEscrowYear = (monthlyTax + monthlyInsurance + hoa) * 12 + item.months.reduce((acc, curr) => acc + curr.pmiPaid, 0);
+
+                      return (
+                        <useMemo key={`year-${item.year}`}>
+                          {/* Linha Macro do Ano */}
+                          <tr 
+                            onClick={() => toggleYear(item.year)}
+                            className="hover:bg-slate-50/80 cursor-pointer font-semibold text-slate-900 bg-white transition"
+                          >
+                            <td className="py-4 px-6 flex items-center gap-2 text-blue-600">
+                              <span className="text-xs transform transition-transform inline-block">
+                                {isExpanded ? "▼" : "▶"}
+                              </span>
+                              Year {item.year}
+                            </td>
+                            <td className="py-4 px-4">{money(item.principalPaid)}</td>
+                            <td className="py-4 px-4">{money(item.interestPaid)}</td>
+                            <td className="py-4 px-4">{money(totalEscrowYear)}</td>
+                            <td className="py-4 px-6 text-right font-bold text-slate-800">{money(item.remainingBalance)}</td>
+                          </tr>
+
+                          {/* Renderização Detalhada dos Meses daquele Ano */}
+                          {isExpanded && item.months.map((mObj) => (
+                            <tr key={`month-${mObj.month}`} className="bg-slate-50/40 border-l-4 border-blue-500 text-xs text-slate-600">
+                              <td className="py-2.5 px-10 text-slate-500">Month {mObj.month}</td>
+                              <td className="py-2.5 px-4">{money(mObj.principalPaid)}</td>
+                              <td className="py-2.5 px-4">{money(mObj.interestPaid)}</td>
+                              <td className="py-2.5 px-4">{money(monthlyTax + monthlyInsurance + hoa + mObj.pmiPaid)} {mObj.pmiPaid === 0 && pmi > 0 && <span className="text-[10px] text-emerald-600 font-bold ml-1">(PMI Dropped)</span>}</td>
+                              <td className="py-2.5 px-6 text-right font-mono text-slate-700">{money(mObj.remainingBalance)}</td>
+                            </tr>
+                          ))}
+                        </useMemo>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
 
           {/* Ad Space */}
           <div className="my-10 rounded-2xl border-2 border-dashed border-slate-300 p-8 text-center bg-slate-50">
@@ -415,6 +574,17 @@ export default function Home() {
                   Results are estimates based on your inputs and the
                   standard mortgage formula. Your lender may provide
                   slightly different numbers.
+                </p>
+              </div>
+
+              {/* NOVO: FAQ ESTRUTURAL ADICIONAL EXIGIDA PARA SEU SEO FICAR COMPLETASSO */}
+              <div className="border rounded-2xl p-5">
+                <h3 className="font-bold text-lg">
+                  When does Private Mortgage Insurance (PMI) automatically cancel?
+                </h3>
+
+                <p className="text-slate-600 mt-2 leading-7">
+                  In the United States, under the Homeowners Protection Act, lenders must automatically terminate conventional PMI when your principal loan balance reaches 78% of the original purchase price of your home, provided you are current on payments. Our advanced breakdown matrix adjusts this value automatically.
                 </p>
               </div>
 
