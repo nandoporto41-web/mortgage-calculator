@@ -74,7 +74,12 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-slate-100">
 
-      {/* SCRIPT CORRIGIDO DE VERIFICAÇÃO DO GOOGLE ADSENSE */}
+      {/* MELHORIA: METATAG DE VERIFICAÇÃO EXIGIDA PELO ADSENSE */}
+      <head>
+        <meta name="google-adsense-account" content="ca-pub-1156108807705161" />
+      </head>
+
+      {/* SCRIPT OFICIAL DO ADSENSE (ID CORRIGIDO COM BASE NA SUA IMAGEM) */}
       <Script
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1156108807705161"
