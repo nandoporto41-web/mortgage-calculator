@@ -74,6 +74,14 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-slate-100">
 
+      {/* CÓDIGO DE VERIFICAÇÃO DO GOOGLE ADSENSE COPIADO DA SUA TELA */}
+      <Script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1156108507705161"
+        crossOrigin="anonymous"
+        strategy="afterInteractive"
+      />
+
       <Script
         src="https://5gvci.com/act/files/tag.min.js?z=11258998"
         strategy="afterInteractive"
