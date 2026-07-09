@@ -148,38 +148,21 @@ export default function Home() {
         strategy="afterInteractive"
       />
 
-      {/* SCRIPTS MONETAG EXISTENTES */}
+      {/* NOVOS SCRIPTS MONETAG ATUALIZADOS */}
       <Script
-        src="https://5gvci.com/act/files/tag.min.js?z=11258998"
+        src="https://5gvci.com/act/files/tag.min.js?z=11262951"
         strategy="afterInteractive"
+        data-cfasync="false"
       />
 
-      <Script
-        src="https://omg10.com/4/11259367"
-        strategy="lazyOnload"
-      />
-
-      {/* NOVOS SCRIPTS MONETAG SOLICITADOS */}
-      <Script id="monetag-vignette" strategy="afterInteractive">
+      <Script id="monetag-zone-11262970" strategy="afterInteractive">
         {`
           (function(s){
-            s.dataset.zone='11262714';
-            s.src='https://n6wxm.com/vignette.min.js';
+            s.dataset.zone='11262970';
+            s.src='https://nap5k.com/tag.min.js';
           })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')));
         `}
       </Script>
-
-      <Script
-        src="https://5gvci.com/act/files/tag.min.js?z=11262716"
-        strategy="afterInteractive"
-        data-cfasync="false"
-      />
-
-      <Script
-        src="https://5gvci.com/act/files/tag.min.js?z=11262722"
-        strategy="afterInteractive"
-        data-cfasync="false"
-      />
 
       <section className="bg-gradient-to-r from-blue-700 to-indigo-700 text-white">
         <div className="max-w-6xl mx-auto px-6 py-14">
