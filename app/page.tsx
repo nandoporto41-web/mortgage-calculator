@@ -138,11 +138,12 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-slate-100">
 
+      {/* MELHORIA: METATAG DE VERIFICAÇÃO EXIGIDA PELO ADSENSE */}
       <head>
         <meta name="google-adsense-account" content="ca-pub-1156108807705161" />
       </head>
 
-      {/* ADSENSE SCRIPT */}
+      {/* SCRIPT OFICIAL DO ADSENSE */}
       <Script
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1156108807705161"
@@ -150,7 +151,18 @@ export default function Home() {
         strategy="afterInteractive"
       />
 
-      {/* MONETAG 11262714 (Vignette) - Inserida dinamicamente para garantir execução correta */}
+      {/* SCRIPTS MONETAG JÁ INSTALADOS */}
+      <Script
+        src="https://5gvci.com/act/files/tag.min.js?z=11258998"
+        strategy="afterInteractive"
+      />
+
+      <Script
+        src="https://omg10.com/4/11259367"
+        strategy="lazyOnload"
+      />
+
+      {/* NOVAS ZONAS DE ANÚNCIO MONETAG PEDIDAS */}
       <Script id="monetag-vignette" strategy="afterInteractive">
         {`
           (function(s){
@@ -160,31 +172,16 @@ export default function Home() {
         `}
       </Script>
 
-      {/* MONETAG 11262716 */}
       <Script
         src="https://5gvci.com/act/files/tag.min.js?z=11262716"
         strategy="afterInteractive"
         data-cfasync="false"
-        async
       />
 
-      {/* MONETAG 11262722 */}
       <Script
         src="https://5gvci.com/act/files/tag.min.js?z=11262722"
         strategy="afterInteractive"
         data-cfasync="false"
-        async
-      />
-
-      {/* SCRIPTS ANTERIORES CASO QUEIRA MANTER ATIVOS EM PARALELO */}
-      <Script
-        src="https://5gvci.com/act/files/tag.min.js?z=11258998"
-        strategy="afterInteractive"
-      />
-
-      <Script
-        src="https://omg10.com/4/11259367"
-        strategy="lazyOnload"
       />
 
       <section className="bg-gradient-to-r from-blue-700 to-indigo-700 text-white">
@@ -391,7 +388,7 @@ export default function Home() {
                   {money(total)}
                 </div>
 
-                {/* GRÁFICO VISUAL DE DISTRIBUIÇÃO DA PARCELA - CORRIGIDO */}
+                {/* GRÁFICO VISUAL DE DISTRIBUIÇÃO DA PARCELA */}
                 <div className="mt-6">
                   <p className="text-xs text-slate-400 mb-2 font-semibold tracking-wider uppercase">Payment Breakdown</p>
                   <div className="h-5 w-full rounded-md overflow-hidden flex bg-slate-800">
@@ -458,6 +455,7 @@ export default function Home() {
 
                   <button
                     className="bg-blue-600 hover:bg-blue-700 rounded-xl py-3 font-bold transition"
+                    onClick={() => window.scrollTo({ top: 900, behavior: "smooth" })}
                   >
                     Calculate
                   </button>
@@ -485,7 +483,7 @@ export default function Home() {
 
           </div>
 
-          {/* COMPONENTE PROFISSIONAL - AMORTIZATION SCHEDULE TABELA - TOTALMENTE REVISADO */}
+          {/* AMORTIZATION SCHEDULE TABELA */}
           <section className="mt-16 border-t pt-12">
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
               <div>
@@ -515,7 +513,6 @@ export default function Home() {
 
                       return (
                         <span className="contents" key={`year-group-${item.year}`}>
-                          {/* Linha Macro do Ano */}
                           <tr 
                             onClick={() => toggleYear(item.year)}
                             className="hover:bg-slate-50/80 cursor-pointer font-semibold text-slate-900 bg-white transition"
@@ -532,7 +529,6 @@ export default function Home() {
                             <td className="py-4 px-6 text-right font-bold text-slate-800">{money(item.remainingBalance)}</td>
                           </tr>
 
-                          {/* Renderização Detalhada dos Meses daquele Ano */}
                           {isExpanded && item.months.map((mObj) => (
                             <tr key={`month-${mObj.month}`} className="bg-slate-50/40 border-l-4 border-blue-500 text-xs text-slate-600">
                               <td className="py-2.5 px-10 text-slate-500">Month {mObj.month}</td>
@@ -554,7 +550,7 @@ export default function Home() {
             </div>
           </section>
 
-          {/* NOVO CONTEÚDO EXTRA DE SEO 1: COMO ESTIMAR O PAGAMENTO MENSAL (PITI) */}
+          {/* CONTEÚDO EXTRA DE SEO E FOOTER REESTRUTURADOS */}
           <section className="mt-16 border-t pt-12 text-slate-800">
             <h2 className="text-3xl font-bold text-slate-900 mb-6">How to Estimate Your Monthly Mortgage Payment</h2>
             <p className="text-slate-600 leading-7 mb-6">
@@ -563,8 +559,14 @@ export default function Home() {
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
                 <h3 className="font-bold text-lg text-blue-700 mb-2">Principal & Interest (P&I)</h3>
-                <p className="text-sm text-slate-600">
+                <p className="text-sm text-slate-600 leading-6">
                   This forms the core foundation of your financing commitment. The principal directly pays down your net loan balance, while the interest covers the lending institution's premium service fees.
+                </p>
+              </div>
+              <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                <h3 className="font-bold text-lg text-amber-700 mb-2">Taxes & Insurance Escrow</h3>
+                <p className="text-sm text-slate-600 leading-6">
+                  Property taxes gathered by your local municipality and annual home insurance coverage are typically held within an escrow account and disbursed smoothly by your servicer every fiscal cycle.
                 </p>
               </div>
             </div>
@@ -572,6 +574,62 @@ export default function Home() {
 
         </div>
       </main>
+
+      {/* RODAPÉ E POLÍTICAS DE PRIVACIDADE INSTITUCIONAIS */}
+      <footer className="bg-slate-900 text-slate-400 text-sm mt-20 border-t border-slate-800">
+        <div className="max-w-6xl mx-auto px-6 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
+          <p>© {new Date().getFullYear()} US Mortgage Calculator. All rights reserved.</p>
+          <div className="flex gap-6 font-medium">
+            <button onClick={() => setShowAbout(true)} className="hover:text-white transition">About Us</button>
+            <button onClick={() => setShowPrivacy(true)} className="hover:text-white transition">Privacy Policy</button>
+          </div>
+        </div>
+      </footer>
+
+      {/* MODAL: ABOUT US */}
+      {showAbout && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white text-slate-800 rounded-3xl max-w-lg w-full p-8 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+            <h3 className="text-2xl font-bold text-slate-900 mb-4">About Our Tool</h3>
+            <p className="text-slate-600 leading-relaxed text-sm mb-6">
+              Our US Mortgage Calculator is a high-precision digital tool designed to deliver clear financial layouts for prospective homebuyers, micro-entrepreneurs, and real estate professionals. By analyzing real-time breakdowns of escrow variables, interest amortization, and active PMI status transitions, we empower users with accurate insight into long-term wealth investments.
+            </p>
+            <button 
+              onClick={() => setShowAbout(false)}
+              className="w-full bg-slate-900 text-white font-bold py-3 rounded-xl hover:bg-slate-800 transition"
+            >
+              Close Window
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: PRIVACY POLICY */}
+      {showPrivacy && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white text-slate-800 rounded-3xl max-w-xl w-full p-8 shadow-2xl relative max-h-[85vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-200">
+            <h3 className="text-2xl font-bold text-slate-900 mb-4">Privacy Policy & Terms</h3>
+            <div className="space-y-4 text-slate-600 text-sm leading-relaxed mb-6">
+              <p>
+                Your privacy is fundamentally secure. This platform operates entirely on client-side state machine mechanics, which means your calculations, home valuation inputs, asset estimates, or interest projections are never processed, logged, or collected on external corporate databases.
+              </p>
+              <p>
+                <strong>Third-Party Advertising Systems:</strong> We integrate verified networks including Google AdSense and Monetag to distribute localized contextual ads. These enterprise services may track safe data variables using standard browser cookies to personalize media impressions based on non-sensitive navigational behaviors.
+              </p>
+              <p>
+                By interacting with our metrics panel and calculating your financial schedules, you explicitly consent to our automated operational frameworks.
+              </p>
+            </div>
+            <button 
+              onClick={() => setShowPrivacy(false)}
+              className="w-full bg-slate-900 text-white font-bold py-3 rounded-xl hover:bg-slate-800 transition sticky bottom-0 shadow-lg"
+            >
+              I Understand
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
