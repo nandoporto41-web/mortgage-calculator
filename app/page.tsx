@@ -138,7 +138,19 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-slate-100">
 
-      {/* MONETAG 1: Script de Anúncio Formato Vignette convertido de forma segura para Next.js */}
+      <head>
+        <meta name="google-adsense-account" content="ca-pub-1156108807705161" />
+      </head>
+
+      {/* ADSENSE SCRIPT */}
+      <Script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1156108807705161"
+        crossOrigin="anonymous"
+        strategy="afterInteractive"
+      />
+
+      {/* MONETAG 11262714 (Vignette) - Inserida dinamicamente para garantir execução correta */}
       <Script id="monetag-vignette" strategy="afterInteractive">
         {`
           (function(s){
@@ -148,18 +160,31 @@ export default function Home() {
         `}
       </Script>
 
-      {/* MONETAG 2: Segunda Zona de Anúncio Ativada */}
+      {/* MONETAG 11262716 */}
       <Script
         src="https://5gvci.com/act/files/tag.min.js?z=11262716"
         strategy="afterInteractive"
         data-cfasync="false"
+        async
       />
 
-      {/* MONETAG 3: Terceira Zona de Anúncio Ativada */}
+      {/* MONETAG 11262722 */}
       <Script
         src="https://5gvci.com/act/files/tag.min.js?z=11262722"
         strategy="afterInteractive"
         data-cfasync="false"
+        async
+      />
+
+      {/* SCRIPTS ANTERIORES CASO QUEIRA MANTER ATIVOS EM PARALELO */}
+      <Script
+        src="https://5gvci.com/act/files/tag.min.js?z=11258998"
+        strategy="afterInteractive"
+      />
+
+      <Script
+        src="https://omg10.com/4/11259367"
+        strategy="lazyOnload"
       />
 
       <section className="bg-gradient-to-r from-blue-700 to-indigo-700 text-white">
